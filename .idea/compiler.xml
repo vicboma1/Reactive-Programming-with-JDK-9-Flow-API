@@ -6,10 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="es.vicboma.reactive.programming" />
         <module name="Reactive-Programming-with-JDK-9-Flow-API" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="es.vicboma.reactive.programming" target="1.9" />
       <module name="Reactive-Programming-with-JDK-9-Flow-API" target="1.9" />
     </bytecodeTargetLevel>
   </component>
