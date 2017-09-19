@@ -2,6 +2,11 @@
 
 ![](https://travis-ci.org/vicboma1/Reactive-Programming-with-JDK-9-Flow-API.svg?branch=master)
 
+ * process a potentially unbounded number of elements
+ * in sequence
+ * asynchronously passing elements between components
+ * with mandatory non-blocking back-pressure
+
 ```java
 @FunctionalInterface   
 public static interface Flow.Publisher<T> {  
