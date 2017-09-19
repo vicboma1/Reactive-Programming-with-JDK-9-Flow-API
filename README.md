@@ -1,5 +1,7 @@
 # Reactive Programming with JDK 9 Flow API
 
+![](https://travis-ci.org/vicboma1/Reactive-Programming-with-JDK-9-Flow-API.svg?branch=master)
+
 ```java
 @FunctionalInterface   
 public static interface Flow.Publisher<T> {  
