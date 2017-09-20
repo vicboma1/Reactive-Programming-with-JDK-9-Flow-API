@@ -1,5 +1,7 @@
 package demo1;
 
+import base.Logger;
+
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;

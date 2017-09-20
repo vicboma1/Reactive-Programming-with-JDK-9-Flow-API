@@ -1,10 +1,11 @@
 package demo1;
 
+import base.Logger;
+
 import java.util.concurrent.*;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.LongStream;
 
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
@@ -46,14 +47,12 @@ public class Publisher implements Flow.Publisher<Integer> {
         private final ExecutorService executor;
 
         private Subscriber<? super Integer> processor;
-        private final AtomicInteger value;
         private AtomicBoolean isCanceled;
 
         public SubscriptionPublisher(Subscriber<? super Integer> subscriber, ExecutorService executor) {
             this.processor = subscriber;
             this.executor = executor;
 
-            value = new AtomicInteger(0);
             isCanceled = new AtomicBoolean(false);
         }
 
@@ -77,8 +76,8 @@ public class Publisher implements Flow.Publisher<Integer> {
         private void publishItems(long n) {
             LongStream.rangeClosed(0,n)
                      .forEach(it -> {
+                         //Warning with "it" inside callback
                         executor.execute(() -> {
-                            //int v = value.incrementAndGet();
                             Logger.printf(LOG_MESSAGE_FORMAT, "publish item: [" + it + "] ...");
                             processor.onNext((int)it);
                         });

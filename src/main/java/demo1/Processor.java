@@ -1,5 +1,7 @@
 package demo1;
 
+import base.Logger;
+
 import java.util.concurrent.*;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
@@ -56,7 +58,7 @@ public class Processor implements Flow.Processor<Integer, String> {
             if (null == item)
                 throw new NullPointerException();
 
-            dataItems.add("item value = " + item * 10 + " after processing");
+            dataItems.add("item value = " + item * 10 + " after processing as String");
             Logger.printf(LOG_MESSAGE_FORMAT,"processing item: [" + item + "] ...");
         }
 
@@ -72,11 +74,8 @@ public class Processor implements Flow.Processor<Integer, String> {
 
 
         private class SubscriptionProcess implements Subscription {
-
             private final ExecutorService executor;
-
             private Subscriber<? super String> subscriber;
-
             private AtomicBoolean isCanceled;
 
             public SubscriptionProcess(Subscriber<? super String> subscriber, ExecutorService executor) {
