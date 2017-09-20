@@ -76,4 +76,7 @@ public class Publisher extends SubmissionPublisher<Integer> {
 
     }
 
+    public Set<Flow.Subscriber<? super Integer>> getAllSubscriber() {
+        return this.subscriberSet;
+    }
 }

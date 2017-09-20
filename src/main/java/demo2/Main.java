@@ -23,6 +23,8 @@ public class Main {
                      String name = Generator.name(it);
                      publisher.subscribe(Subscriber.create( name.toUpperCase(),it));
                  });
+
     }
+
 
 }
