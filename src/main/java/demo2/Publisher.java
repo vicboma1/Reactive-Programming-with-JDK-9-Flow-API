@@ -2,7 +2,9 @@ package demo2;
 
 import base.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -10,6 +12,8 @@ public class Publisher extends SubmissionPublisher<Integer> {
 
     private static final String LOG_MESSAGE_FORMAT = "demo2.Publisher ----> [%s] %s%n";
     private final PublisherCore publisherCore;
+    //Persistimos subscriptores cancelados
+    private final Set<Flow.Subscriber<? super Integer>> subscriberSet;
 
     public static Publisher create(Executor executor,int corePoolSize, int maxBufferCapacity, long period, TimeUnit unit,int maxItemToPublish) {
         return new Publisher(executor,corePoolSize, maxBufferCapacity, period, unit, maxItemToPublish);
@@ -19,6 +23,7 @@ public class Publisher extends SubmissionPublisher<Integer> {
         super(executor, maxBufferCapacity);
 
         final AtomicInteger aInt = new AtomicInteger(0);
+        subscriberSet = new HashSet();
 
         publisherCore = PublisherCore.create(
                 corePoolSize,
@@ -50,12 +55,14 @@ public class Publisher extends SubmissionPublisher<Integer> {
     @Override
     public void subscribe(Flow.Subscriber<? super Integer> subscriber) {
         super.subscribe(subscriber);
+        //refrescamos todos los subscriptores
+        subscriberSet.addAll(getSubscribers());
     }
 
     public void close() {
         Logger.printf("shutting down...\n");
 
-        getSubscribers().stream()
+        subscriberSet.stream()
                         .filter(subscriber -> subscriber != null)
                         .forEach(subscriber -> {
                             Logger.printf(LOG_MESSAGE_FORMAT,"Subscriber " + ((Subscriber)subscriber).getName() + " isSubscribed(): " + isSubscribed(subscriber));
