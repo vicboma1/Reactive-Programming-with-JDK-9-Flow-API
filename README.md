@@ -32,7 +32,7 @@ public static interface Flow.demo1.Processor<T,R>  extends Flow.demo1.Subscriber
 
 Demo1 
  * Publisher ( Integer ) <-> [ Processor { Integer , String } ] <-> Subscriber ( String )
- 
+ * Executor
 
 ```
 Hello Reactive World!
@@ -69,7 +69,8 @@ Finalize Reactive World!
 
 Demo 2 
  * SubmissionPublisher ( Integer ) <-- Random --> List( Subscriber) ( Object )
-
+ * Scheduler
+ 
 ```
 demo2.Subscriber E -> [pool-1-thread-2] Subscribed...
 demo2.Subscriber E -> [pool-1-thread-2] request new 4 items...
