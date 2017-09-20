@@ -1,84 +1,77 @@
+package demo1;
+
 import java.util.concurrent.*;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static java.lang.Thread.currentThread;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
 
 /**
  * Created by vicboma on 19/09/17.
  */
-public class Processor1 implements Flow.Processor<Integer, String> {
+public class Processor implements Flow.Processor<Integer, String> {
 
-        public static Processor1 create() {
-            return new Processor1();
+    private static final String LOG_MESSAGE_FORMAT = "demo1.Processor --> [%s] %s%n";
+
+    public static Processor create(ExecutorService executor, long iterations) {
+            return new Processor(executor, iterations);
         }
 
-        private static final String LOG_MESSAGE_FORMAT = "Processor >> [%s] %s%n";
-
+        private Finalizer finalizer;
         private Subscription publisherSubscription;
-
-        final ExecutorService executor = Executors.newFixedThreadPool(4);
-        private MySubscription subscription;
-        private long DEMAND;
+        private SubscriptionProcess subscription;
+        private long iterations;
         private ConcurrentLinkedQueue<String> dataItems;
+        private ExecutorService executor;
 
-        private final CompletableFuture<Void> terminated = new CompletableFuture<>();
-
-        public Processor1() {
-            DEMAND = 0;
-            dataItems = new ConcurrentLinkedQueue<String>();
-        }
-
-        public void setDEMAND(long n) {
-            this.DEMAND = n;
+        public Processor(ExecutorService executor, long iterations) {
+            this.iterations = iterations;
+            dataItems = new ConcurrentLinkedQueue();
+            this.executor = executor;
+            this.finalizer = Finalizer.create();
         }
 
         @Override
         public void subscribe(Subscriber<? super String> subscriber) {
-            subscription = new MySubscription(subscriber, executor);
-
+            subscription = new SubscriptionProcess(subscriber, executor);
             subscriber.onSubscribe(subscription);
         }
 
         @Override
         public void onSubscribe(Subscription subscription) {
-            log("Subscribed...");
-
+            Logger.printf(LOG_MESSAGE_FORMAT,"Subscribed...");
             publisherSubscription = subscription;
-
             requestItems();
         }
 
         private void requestItems() {
-            log("Requesting %d new items...", DEMAND);
-            publisherSubscription.request(DEMAND);
+            Logger.printf(LOG_MESSAGE_FORMAT,"Requesting %d new items...", iterations);
+            publisherSubscription.request(iterations);
         }
 
         @Override
         public void onNext(Integer item) {
-
             if (null == item)
                 throw new NullPointerException();
 
             dataItems.add("item value = " + item * 10 + " after processing");
-            log("processing item: [" + item + "] ...");
-
+            Logger.printf(LOG_MESSAGE_FORMAT,"processing item: [" + item + "] ...");
         }
 
         @Override
         public void onComplete() {
-            log("Complete!");
+            Logger.printf(LOG_MESSAGE_FORMAT,"Complete!");
         }
 
         @Override
         public void onError(Throwable t) {
-            log("Error >> %s", t);
+            Logger.printf(LOG_MESSAGE_FORMAT,"Error >> %s", t);
         }
 
-        private class MySubscription implements Subscription {
+
+        private class SubscriptionProcess implements Subscription {
 
             private final ExecutorService executor;
 
@@ -86,10 +79,9 @@ public class Processor1 implements Flow.Processor<Integer, String> {
 
             private AtomicBoolean isCanceled;
 
-            public MySubscription(Subscriber<? super String> subscriber, ExecutorService executor) {
+            public SubscriptionProcess(Subscriber<? super String> subscriber, ExecutorService executor) {
                 this.executor = executor;
                 this.subscriber = subscriber;
-
                 isCanceled = new AtomicBoolean(false);
             }
 
@@ -112,14 +104,15 @@ public class Processor1 implements Flow.Processor<Integer, String> {
                 int remainItems = dataItems.size();
 
                 if ((remainItems == n) || (remainItems > n)) {
+
                     for (int i = 0; i < n; i++) {
                         executor.execute(() -> {
                             subscriber.onNext(dataItems.poll());
                         });
                     }
-
-                    log("Remaining " + (dataItems.size() - n) + " items to be published to Subscriber!");
+                    Logger.printf(LOG_MESSAGE_FORMAT,"Remaining " + (dataItems.size() - n) + " items to be published to demo1.Subscriber!");
                 } else if ((remainItems > 0) && (remainItems < n)) {
+
                     for (int i = 0; i < remainItems; i++) {
                         executor.execute(() -> {
                             subscriber.onNext(dataItems.poll());
@@ -127,8 +120,9 @@ public class Processor1 implements Flow.Processor<Integer, String> {
                     }
 
                     subscriber.onComplete();
+
                 } else {
-                    log("Processor contains no item!");
+                    Logger.printf(LOG_MESSAGE_FORMAT,"demo1.Processor contains no item!");
                 }
 
             }
@@ -142,20 +136,11 @@ public class Processor1 implements Flow.Processor<Integer, String> {
             }
 
             private void shutdown() {
-                log("Shut down executor...");
+                Logger.printf(LOG_MESSAGE_FORMAT,"Shutdown executor...");
                 executor.shutdown();
-                newSingleThreadExecutor().submit(() -> {
-
-                    log("Shutdown complete.");
-                    terminated.complete(null);
-                });
+                Logger.printf(LOG_MESSAGE_FORMAT,"Shutdown complete.");
+                finalizer.complete();
             }
-        }
-
-        private void log(String message, Object... args) {
-            String fullMessage = String.format(LOG_MESSAGE_FORMAT, currentThread().getName(), message);
-
-            System.out.printf(fullMessage, args);
         }
     }
 
