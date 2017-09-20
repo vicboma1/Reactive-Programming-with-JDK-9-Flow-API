@@ -1,4 +1,6 @@
-package demo1;
+package base;
+
+import demo1.Main;
 
 import static java.lang.Thread.currentThread;
 
