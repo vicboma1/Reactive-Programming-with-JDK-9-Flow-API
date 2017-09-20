@@ -68,7 +68,7 @@ Finalize Reactive World!
 ```
 
 Demo 2 
- * SubmissionPublisher ( Integer ) <-- Random --> List<Subscriber> ( Object )
+ * SubmissionPublisher ( Integer ) <-- Random --> List( Subscriber) ( Object )
 
 ```
 demo2.Subscriber E -> [pool-1-thread-2] Subscribed...
