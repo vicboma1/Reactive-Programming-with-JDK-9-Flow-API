@@ -31,6 +31,8 @@ public static interface Flow.demo1.Processor<T,R>  extends Flow.demo1.Subscriber
 ```
 
 Demo1 
+ * Publisher ( Integer ) <-> [ Processor { Integer , String } ] <-> Subscriber ( String )
+ 
 
 ```java
 Hello Reactive World!
@@ -67,4 +69,5 @@ Finalize Reactive World!
 
 
 References :
+* https://community.oracle.com/docs/DOC-1006738
 * http://javasampleapproach.com/java/java-9-flow-api-example-processor#1_Create_implementation_of_Publisher
