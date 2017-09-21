@@ -30,9 +30,9 @@ public static interface Flow.demo1.Processor<T,R>  extends Flow.demo1.Subscriber
 
 ```
 
-Demo1 
+## Demo1 
  * Publisher ( Integer ) <-> [ Processor { Integer , String } ] <-> Subscriber ( String )
- 
+ * Executor
 
 ```
 Hello Reactive World!
@@ -67,9 +67,10 @@ Finalize Reactive World!
 
 ```
 
-Demo 2 
- * SubmissionPublisher ( Integer ) <-- Random --> List<Subscriber> ( Object )
-
+## Demo 2 
+ * SubmissionPublisher ( Integer ) <-- Random --> List( Subscriber) ( Object )
+ * Scheduler
+ 
 ```
 demo2.subscriber.Subscriber E -> [pool-1-thread-2] Subscribed...
 demo2.subscriber.Subscriber E -> [pool-1-thread-2] request new 4 items...
@@ -172,4 +173,5 @@ demo2.subscriber.Subscriber J -> [pool-1-thread-1] Complete!
 
 References :
 * https://community.oracle.com/docs/DOC-1006738
+* https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
 * http://javasampleapproach.com
