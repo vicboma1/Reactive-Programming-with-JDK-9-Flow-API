@@ -1,6 +1,6 @@
 # Reactive Programming with JDK 9 Flow API
 
-[![](https://travis-ci.org/vicboma1/Reactive-Programming-with-JDK-9-Flow-API.svg?branch=master)](https://travis-ci.org/vicboma1/Reactive-Programming-with-JDK-9-Flow-API)
+[![](https://travis-ci.org/vicboma1/Reactive-Programming-with-JDK-9-Flow-API.svg?branch=master)](https://travis-ci.org/vicboma1/Reactive-Programming-with-JDK-9-Flow-API)  ![](https://img.shields.io/badge/Java-1.9-blue.svg)  ![](https://img.shields.io/badge/JUnit-4.11-orange.svg)
 
  * process a potentially unbounded number of elements
  * in sequence
