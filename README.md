@@ -172,6 +172,7 @@ demo2.subscriber.Subscriber J -> [pool-1-thread-1] Complete!
 ```
 
 References :
+* https://github.com/vicboma1/Reactive-Programming-with-Reactor-Core
 * https://community.oracle.com/docs/DOC-1006738
 * https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
 * http://javasampleapproach.com
