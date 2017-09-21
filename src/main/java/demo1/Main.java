@@ -21,7 +21,7 @@ public class Main {
             final ExecutorService executor = Executors.newFixedThreadPool(2);
 
             final Publisher publisher = Publisher.create(executor);
-            final Subscriber subscriber = Subscriber.create(ITERATIONS);
+            final Subscriber subscriber = Subscriber.create(4);
             final Processor processor = Processor.create(executor,ITERATIONS);
 
             publisher.subscribe(processor);

@@ -20,7 +20,7 @@ public class Publisher implements Flow.Publisher<Integer> {
         return new Publisher(executor);
     }
 
-    private static final String LOG_MESSAGE_FORMAT = "demo1.Publisher --> [%s] %s%n";
+    private static final String LOG_MESSAGE_FORMAT = "demo1.PublisherImpl --> [%s] %s%n";
 
     private ExecutorService executor;
     private Finalizer finalizer;

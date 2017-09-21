@@ -109,7 +109,7 @@ public class Processor implements Flow.Processor<Integer, String> {
                             subscriber.onNext(dataItems.poll());
                         });
                     }
-                    Logger.printf(LOG_MESSAGE_FORMAT,"Remaining " + (dataItems.size() - n) + " items to be published to demo1.Subscriber!");
+                    Logger.printf(LOG_MESSAGE_FORMAT,"Remaining " + (dataItems.size() - n) + " items to be published to demo1.subscriber!");
                 } else if ((remainItems > 0) && (remainItems < n)) {
 
                     for (int i = 0; i < remainItems; i++) {

@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Subscriber implements Flow.Subscriber<String> {
 
-    private static final String LOG_MESSAGE_FORMAT = "demo1.Subscriber -> [%s] %s%n";
+    private static final String LOG_MESSAGE_FORMAT = "demo1.subscriber -> [%s] %s%n";
     private long iterations = 0;
     private Flow.Subscription subscription;
     private AtomicLong count;

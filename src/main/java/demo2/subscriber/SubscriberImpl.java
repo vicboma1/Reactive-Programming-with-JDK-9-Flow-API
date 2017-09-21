@@ -1,13 +1,16 @@
-package demo2;
+package demo2.subscriber;
 
 import base.Logger;
+import demo2.Generator;
 
 import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Subscriber<T extends Object> implements Flow.Subscriber<T> {
+public class SubscriberImpl<T extends Object> implements Subscriber<T> {
 
     private String name;
+    private boolean isCompleted;
+    private boolean isCancel;
 
     private Flow.Subscription subscription;
     private AtomicInteger count;
@@ -15,14 +18,18 @@ public class Subscriber<T extends Object> implements Flow.Subscriber<T> {
     private int DEMAND = 0;
 
     public static Subscriber create(String _name,int n) {
-        return new Subscriber(_name,n);
+        return new SubscriberImpl(_name,n);
     }
 
-    Subscriber(String _name,int n) {
-        name = _name;
+    SubscriberImpl(String _name,int n) {
+        this.name = _name;
         this.DEMAND = n;
-        count = new AtomicInteger(DEMAND);
+        this.count = new AtomicInteger(DEMAND);
+        this.isCompleted = false;
+        this.isCancel = false;
     }
+
+
 
     @Override
     public void onSubscribe(Flow.Subscription subscription) {
@@ -31,6 +38,7 @@ public class Subscriber<T extends Object> implements Flow.Subscriber<T> {
 
         request(DEMAND);
     }
+
 
     private void request(int n) {
         Logger.printf(getTittle(),"request new " + n + " items...");
@@ -49,24 +57,40 @@ public class Subscriber<T extends Object> implements Flow.Subscriber<T> {
                 Logger.printf(getTittle(),"Cancel subscribe...  ");
                 subscription.cancel();
             }
+
         }
 
     }
 
     @Override
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    @Override
+    public boolean isCancel() {
+        return isCancel;
+    }
+
+    @Override
     public void onComplete() {
         Logger.printf(getTittle(),"Complete! ");
+        this.isCompleted = true;
+
     }
 
     @Override
     public void onError(Throwable t) {
         Logger.printf(getTittle(),"Error: " + t.getMessage());
+        this.isCancel = true;
     }
 
+    @Override
     public String getTittle() {
-        return "demo2.Subscriber "+name+" -> [%s] %s%n";
+        return "demo2.subscriber.subscriber "+name+" -> [%s] %s%n";
     }
 
+    @Override
     public String getName() {
         return name;
     }
