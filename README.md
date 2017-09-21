@@ -173,4 +173,5 @@ demo2.Subscriber J -> [pool-1-thread-1] Complete!
 
 References :
 * https://community.oracle.com/docs/DOC-1006738
+* https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
 * http://javasampleapproach.com
